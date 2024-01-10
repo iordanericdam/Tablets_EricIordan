@@ -37,12 +37,18 @@ public class main {
 			clientes[i][0] = contador;
 			ventas[i][0] = contador;
 		}
+		
 		tablets[0][0] = "ID";
 		tablets[0][1] = "Marca";
 		tablets[0][2] = "Modelo";
 		tablets[0][3] = "Capacidad";
 		tablets[0][4] = "Precio";
 		tablets[0][5] = "Stock";
+		
+		clientes[0][0] = "ID";
+		clientes[0][1] = "DNI";
+		clientes[0][2] = "Nombre";
+		clientes[0][3] = "Apellidos";
 
 		ventas[0][0] = "ID";
 		ventas[0][1] = "ID_Tablet";
@@ -70,11 +76,11 @@ public class main {
 		clientes[1][2] = "Eric Aris";
 		clientes[1][3] = "Iordan";
 
-		clientes[2][1] = "1234J";
+		clientes[2][1] = "12345678J";
 		clientes[2][2] = "Edurne";
 		clientes[2][3] = "Cerrada Uribesalgo";
 
-		ventas[1][1] = "69";
+//		ventas[1][1] = "40";
 
 		do {
 			System.out.println("*******************************************");
@@ -200,11 +206,11 @@ public class main {
 				agregarIDTablet = false;
 				for (int i = 0; i < tablets.length; i++) {
 					if (Objects.equals(clientes[i][0], tabletVender)) {
+						tablets[i][5] = "false";
 						for (int n = 0; n < ventas.length; n++) {
 							if (tablets[n][1] == null) {
-
 								ventas[n][1] = tabletVender;
-								n = tablets.length;
+								n = ventas.length;
 							}
 
 						}
