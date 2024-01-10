@@ -27,9 +27,9 @@ public class main {
 		final String clientes[][] = new String[100][4];
 		final String ventas[][] = new String[100][3];
 		int opcion = 0;
-		String opcionS, contador, dni, pregAgregarDni, tabletVender;
+		String opcionS, contador, dni, pregAgregarDni, tabletVender, consultarCliente;
 		char tabletDisponible;
-		boolean opcionC, datoIntroducido, tabletDisponibleBool, agregarDni, agregarIDTablet;
+		boolean opcionC, tabletDisponibleBool, agregarDni, agregarIDTablet;
 
 		for (int i = 1; i < tablets.length; i++) {
 			contador = Integer.toString(i);
@@ -37,14 +37,14 @@ public class main {
 			clientes[i][0] = contador;
 			ventas[i][0] = contador;
 		}
-		
+
 		tablets[0][0] = "ID";
 		tablets[0][1] = "Marca";
 		tablets[0][2] = "Modelo";
 		tablets[0][3] = "Capacidad";
 		tablets[0][4] = "Precio";
 		tablets[0][5] = "Stock";
-		
+
 		clientes[0][0] = "ID";
 		clientes[0][1] = "DNI";
 		clientes[0][2] = "Nombre";
@@ -79,6 +79,11 @@ public class main {
 		clientes[2][1] = "12345678J";
 		clientes[2][2] = "Edurne";
 		clientes[2][3] = "Cerrada Uribesalgo";
+
+		ventas[1][1] = "2";
+		ventas[1][2] = "1";
+		ventas[2][1] = "2";
+		ventas[2][2] = "2";
 
 //		ventas[1][1] = "40";
 
@@ -147,7 +152,7 @@ public class main {
 					Scanner scCliente = new Scanner(System.in);
 					agregarDni = false;
 					System.out.print("Introduce el DNI: ");
-					dni = sc.next().toLowerCase();
+					dni = sc.next().toUpperCase();
 					for (int i = 0; i < clientes.length; i++) {
 						if (!Objects.equals(clientes[i][1], dni)) {
 							if (clientes[i][1] == null || agregarDni) {
@@ -224,7 +229,7 @@ public class main {
 				for (int i = 0; i < tablets.length; i++) {
 					for (int j = 1; j < tablets[i].length; j++) {
 						if (tablets[i][5] == "true" || tablets[i][5] == "Stock") {
-							if (tablets[i][j] == null) {
+							if (tablets[i][1] == null) {
 								System.out.print(tablets[i][j] + " |");
 							} else {
 								System.out.print(tablets[i][j] + " |");
@@ -237,6 +242,46 @@ public class main {
 				}
 				break;
 			case 5:
+				for (int i = 0; i < clientes.length; i++) {
+					for (int j = 0; j < clientes[i].length; j++) {
+						if (clientes[i][1] != null) {
+							if (clientes[i][j] == null) {
+								System.out.print(clientes[i][j] + " |");
+							} else {
+								System.out.print(clientes[i][j] + " |");
+							}
+							if (j + 1 >= clientes[i].length) {
+								System.out.println();
+							}
+						}
+					}
+
+				}
+				System.out.println("Introduce el ID del cliente que desea consultar:");
+				consultarCliente = sc.next();
+
+				for (int i = 0; i < ventas.length; i++) {
+						if (Objects.equals(ventas[i][1], consultarCliente) || tablets[i][5] == "Stock") {
+							if (Objects.equals(ventas[i][2], tablets[i][0]) || tablets[i][5] == "Stock") {
+								for (int j = 1; j < 5; j++) {
+									if (tablets[i][1] != null) {
+										if (tablets[i][j] == null) {
+											System.out.print(tablets[i][j] + " |");
+										} else {
+											System.out.print(tablets[i][j] + " |");
+										}
+										if (j + 2 >= tablets[i].length) {
+											System.out.println();
+										}
+									}
+								}
+
+							}
+						}
+
+				}
+
+				break;
 			case 6:
 				System.out.println("Nos vemos pronto ;)");
 				break;
@@ -263,6 +308,7 @@ public class main {
 //				BORRAR CASE 8
 				for (int i = 0; i < ventas.length; i++) {
 					for (int j = 0; j < ventas[i].length; j++) {
+						if (ventas[i][1] != null) {
 							if (ventas[i][j] == null) {
 								System.out.print(ventas[i][j] + " |");
 							} else {
@@ -271,8 +317,10 @@ public class main {
 							if (j + 1 >= ventas[i].length) {
 								System.out.println();
 							}
-
+							
+						}
 						
+
 					}
 
 				}
