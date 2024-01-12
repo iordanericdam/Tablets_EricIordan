@@ -26,10 +26,10 @@ public class main {
 		final String tablets[][] = new String[100][6];
 		final String clientes[][] = new String[100][4];
 		final String ventas[][] = new String[100][3];
-		int opcion = 0;
+		int opcion = 0, atempError;
 		String opcionS, contador, dni, pregAgregarDni, tabletVender, consultarCliente, IDClienteVendido;
 		char tabletDisponible;
-		boolean opcionC, tabletDisponibleBool, agregarDni, agregarIDTablet;
+		boolean opcionC, tabletDisponibleBool, agregarDni, agregarIDTablet, stockTablets, existenciaClientes = false, existenciaVentas, ventaRealizada = false;
 
 		for (int i = 1; i < tablets.length; i++) {
 			contador = Integer.toString(i);
@@ -53,7 +53,6 @@ public class main {
 		ventas[0][0] = "ID";
 		ventas[0][1] = "ID_Tablet";
 		ventas[0][2] = "ID_Cliente";
-
 
 		do {
 			System.out.println("*******************************************");
@@ -154,102 +153,177 @@ public class main {
 				} while (!agregarDni);
 				break;
 			case 3:
-				System.out.println(
-						"Le mostrare una lista con las tablets disponibles para la venta, a continuacion debe introducir el numero de la tablet que desea vender.");
+				atempError = 0;
 
+//				Futuro metodo
+				stockTablets = false;
 				for (int i = 0; i < tablets.length; i++) {
-					for (int j = 0; j < tablets[i].length; j++) {
-						if (tablets[i][5] == "true" || tablets[i][5] == "Stock") {
-							if (tablets[i][j] == null) {
-								System.out.print(tablets[i][j] + " |");
-							} else {
-								System.out.print(tablets[i][j] + " |");
-							}
-							if (j + 1 >= tablets[i].length) {
-								System.out.println();
-							}
-						}
+					if (tablets[i][1] != null && tablets[i][5] == "true") {
+						stockTablets = true;
 					}
+
 				}
+//				Fin metodo
+//				Futuro metodo
+				existenciaClientes = false;
+				for (int i = 1; i < clientes.length; i++) {
+					if (clientes[i][1] != null) {
+						existenciaClientes = true;
+					}
 
-				System.out.println();
-				System.out.print("Y bien, que tablet desea vender: ");
-				tabletVender = sc.next();
+				}
+				
+//				Fin metodo
 
-				agregarIDTablet = false;
-				for (int i = 0; i < tablets.length; i++) {
-					if (Objects.equals(clientes[i][0], tabletVender)) {
-						tablets[i][5] = "false";
-						for (int n = 0; n < ventas.length; n++) {
-							if (ventas[n][1] == null) {
-								ventas[n][1] = tabletVender;
-								
-								for (int l = 0; l < clientes.length; l++) {
-									for (int j = 0; j < clientes[l].length; j++) {
-										if (clientes[l][1] != null) {
-											if (clientes[l][j] == null) {
-												System.out.print(clientes[l][j] + " |");
-											} else {
-												System.out.print(clientes[l][j] + " |");
-											}
-											if (j + 1 >= clientes[l].length) {
-												System.out.println();
-											}
-										}
-									}
+				if (stockTablets && existenciaClientes) {
 
+					System.out.println(
+							"Le mostrare una lista con las tablets disponibles para la venta, a continuacion debe introducir el numero de la tablet que desea vender.");
+
+					for (int i = 0; i < tablets.length; i++) {
+						for (int j = 0; j < tablets[i].length; j++) {
+							if (tablets[i][5] == "true" || tablets[i][5] == "Stock") {
+								if (tablets[i][j] == null) {
+									System.out.print(tablets[i][j] + " |");
+								} else {
+									System.out.print(tablets[i][j] + " |");
 								}
-								
-								System.out.print("Introduce el ID del cliente al que se lo ha vendido: ");
-								ventas[n][2] = sc.next();
-								
-								
-								n = ventas.length;
+								if (j + 1 >= tablets[i].length) {
+									System.out.println();
+								}
 							}
+						}
+					}
 
+					System.out.println();
+					System.out.print("Y bien, que tablet desea vender: ");
+					tabletVender = sc.next();
+					
+					ventaRealizada = false;
+					for (int i = 0; i < tablets.length; i++) {
+						if (tabletVender.equals(tablets[i][0])) {
+							for (int n = 0; n < ventas.length; n++) {
+								if (ventas[n][1] == null) {
+									if (existenciaClientes) {
+										for (int l = 0; l < clientes.length; l++) {
+											for (int j = 0; j < clientes[l].length; j++) {
+												if (clientes[l][1] != null) {
+													if (clientes[l][j] == null) {
+														System.out.print(clientes[l][j] + " |");
+													} else {
+														System.out.print(clientes[l][j] + " |");
+													}
+													if (j + 1 >= clientes[l].length) {
+														System.out.println();
+													}
+												}
+											}
+
+										}
+										do {
+											System.out.print("Introduce el ID del cliente al que se lo ha vendido: ");
+											IDClienteVendido = sc.next();
+											atempError += 1;
+											for (int e = 0; e< clientes.length; e++ ) {
+												if (IDClienteVendido.equals(clientes[i][0]) && clientes[i][1] != null) {
+													ventas[n][1] = tabletVender;
+													ventas[n][2] = IDClienteVendido;
+													ventaRealizada = true;
+													tablets[i][5] = "false";
+													System.out.println("La tablet se ha quedado sin stock");
+													e = clientes.length;
+												} 
+												
+											}
+											if (atempError == 3) {
+												System.out.println("Has superado el limite de intentos :(");
+												ventaRealizada = true;
+												
+											}
+											n = ventas.length;
+										} while (!ventaRealizada);
+									}
+								}
+							}
 						}
 
 					}
+
+				} 
+				
+				if (!stockTablets) {
+					System.out.println("Lo sentimos no hay stock");
+				}
+				
+				if ( stockTablets && !existenciaClientes) {
+					System.out.println("Antes de realizar una venta debes tener minimo 1 cliene");
+				}
+				
+				if(stockTablets && existenciaClientes && !ventaRealizada) {
+					System.out.println("Vaya! parece que alguno de los datos introducidos no son correctos, si considera que ha sido un error vuelva a intentarlo");
 				}
 
 				break;
 			case 4:
-				System.out.println();
+				
+				stockTablets = false;
 				for (int i = 0; i < tablets.length; i++) {
-					for (int j = 1; j < (tablets[i].length-1); j++) {
-						if (tablets[i][5] == "true" || tablets[i][5] == "Stock") {
-							if (tablets[i][1] == null) {
-								System.out.print(tablets[i][j] + " |");
-							} else {
-								System.out.print(tablets[i][j] + " |");
-							}
-							if (j + 2 >= tablets[i].length) {
-								System.out.println();
+					if (tablets[i][1] != null && tablets[i][5] == "true") {
+						stockTablets = true;
+					}
+
+				}
+				
+				if (stockTablets) {
+					System.out.println();
+					for (int i = 0; i < tablets.length; i++) {
+						for (int j = 1; j < (tablets[i].length - 1); j++) {
+							if (tablets[i][5] == "true" || tablets[i][5] == "Stock") {
+								if (tablets[i][1] == null) {
+									System.out.print(tablets[i][j] + " |");
+								} else {
+									System.out.print(tablets[i][j] + " |");
+								}
+								if (j + 2 >= tablets[i].length) {
+									System.out.println();
+								}
 							}
 						}
 					}
+					
+				} else {
+					System.out.println("Vaya, parece que no tenemos stock");
 				}
 				break;
 			case 5:
-				for (int i = 0; i < clientes.length; i++) {
-					for (int j = 0; j < clientes[i].length; j++) {
-						if (clientes[i][1] != null) {
-							if (clientes[i][j] == null) {
-								System.out.print(clientes[i][j] + " |");
-							} else {
-								System.out.print(clientes[i][j] + " |");
-							}
-							if (j + 1 >= clientes[i].length) {
-								System.out.println();
-							}
-						}
+				
+				existenciaVentas = false;
+				for (int i = 1; i < ventas.length; i++) {
+					if (ventas[i][1] != null) {
+						existenciaVentas = true;
 					}
 
 				}
-				System.out.println("Introduce el ID del cliente que desea consultar:");
-				consultarCliente = sc.next();
+				if (existenciaVentas) {
+					for (int i = 0; i < clientes.length; i++) {
+						for (int j = 0; j < clientes[i].length; j++) {
+							if (clientes[i][1] != null) {
+								if (clientes[i][j] == null) {
+									System.out.print(clientes[i][j] + " |");
+								} else {
+									System.out.print(clientes[i][j] + " |");
+								}
+								if (j + 1 >= clientes[i].length) {
+									System.out.println();
+								}
+							}
+						}
 
-				for (int i = 0; i < ventas.length; i++) {
+					}
+					System.out.println("Introduce el ID del cliente que desea consultar:");
+					consultarCliente = sc.next();
+
+					for (int i = 0; i < ventas.length; i++) {
 						if (Objects.equals(ventas[i][1], consultarCliente) || tablets[i][5] == "Stock") {
 							if (Objects.equals(ventas[i][2], tablets[i][0]) || tablets[i][5] == "Stock") {
 								for (int j = 1; j < 5; j++) {
@@ -268,52 +342,49 @@ public class main {
 							}
 						}
 
+					}		
+				} else {
+					System.out.println("Vaya parece que no se ha realizada ninguna venta todia, vuelva en unos dias");
 				}
-
+				
 				break;
 			case 6:
 				System.out.println("Nos vemos pronto ;)");
 				break;
+				
 			case 7:
-//				BORRAR CASE 7
-				for (int i = 0; i < clientes.length; i++) {
-					for (int j = 0; j < clientes[i].length; j++) {
-						if (clientes[i][1] != null) {
-							if (clientes[i][j] == null) {
-								System.out.print(clientes[i][j] + " |");
-							} else {
-								System.out.print(clientes[i][j] + " |");
-							}
-							if (j + 1 >= clientes[i].length) {
-								System.out.println();
-							}
-						}
-					}
-
-				}
-				break;
-
-			case 8:
-//				BORRAR CASE 8
-				for (int i = 0; i < ventas.length; i++) {
-					for (int j = 0; j < ventas[i].length; j++) {
-						if (ventas[i][1] != null) {
-							if (ventas[i][j] == null) {
-								System.out.print(ventas[i][j] + " |");
-							} else {
-								System.out.print(ventas[i][j] + " |");
-							}
-							if (j + 1 >= ventas[i].length) {
-								System.out.println();
-							}
-							
-						}
+				for (int l = 0; l < clientes.length; l++) {
+					for (int j = 0; j < clientes[l].length; j++) {
 						
-
+							if (clientes[l][j] == null) {
+								System.out.print(clientes[l][j] + " |");
+							} else {
+								System.out.print(clientes[l][j] + " |");
+							}
+							if (j + 1 >= clientes[l].length) {
+								System.out.println();
+							}
 					}
 
 				}
-				break;
+				
+			case 8:
+				for (int l = 0; l < ventas.length; l++) {
+					for (int j = 0; j < ventas[l].length; j++) {
+						if (ventas[l][1] != null) {
+							if (ventas[l][j] == null) {
+								System.out.print(ventas[l][j] + " |");
+							} else {
+								System.out.print(ventas[l][j] + " |");
+							}
+							if (j + 1 >= ventas[l].length) {
+								System.out.println();
+							}
+						}
+					}
+
+				}
+			
 			default:
 				System.out.println(
 						"La opcion que ha seleccionado no es correcta por favor vuelva a probar o salga pulsando el 6");
