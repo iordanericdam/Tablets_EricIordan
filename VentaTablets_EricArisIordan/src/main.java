@@ -43,8 +43,8 @@ public class main {
 		tablets[0][0] = "ID";
 		tablets[0][1] = "Marca";
 		tablets[0][2] = "Modelo";
-		tablets[0][3] = "Capacidad";
-		tablets[0][4] = "Precio";
+		tablets[0][3] = "Capacidad (Gb)";
+		tablets[0][4] = "Precio (€)";
 		tablets[0][5] = "Stock";
 
 		clientes[0][0] = "ID";
@@ -93,7 +93,8 @@ public class main {
 							if (marcaTablet.length() < 3) {
 								System.out.println("La marca debe tener al menos 3 caracteres");
 							}
-						} while (marcaTablet.length() <= 2);
+							
+						} while (marcaTablet.length() <= 2 );
 
 						do {
 							System.out.print("Introduce el modelo de la tablet: ");
@@ -405,13 +406,15 @@ public class main {
 					consultarCliente = sc.next();
 					System.out.println();
 
-					for (int enca = 1; enca < 5; enca++) {
-						System.out.print(tablets[0][enca] + " |");
-					}
+					
 					System.out.println();
 					clienteConCompra = false;
 					for (int i = 0; i < ventas.length; i++) {
 						if (ventas[i][1] != null && (ventas[i][1].equals(consultarCliente))) {
+							for (int enca = 1; enca < 5; enca++) {
+								System.out.print(tablets[0][enca] + " |");
+							}
+							System.out.println();
 							for (int f = 0; f < tablets.length; f++) {
 								if (ventas[i][2].equals(tablets[f][0])) {
 									for (int n = 1; n < (tablets[i].length - 1); n++) {
@@ -431,7 +434,7 @@ public class main {
 
 								}
 
-							} // fin for
+							} 
 
 						}
 					}
